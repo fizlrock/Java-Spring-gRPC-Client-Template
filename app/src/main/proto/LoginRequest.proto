@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option java_outer_classname = "LoginProtos";
+option java_package = "dev.fizlrock.ears.proto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message RegistrationRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+
+message AudioUploadRequest {
+    oneof request {
+        Metadata metadata = 1;
+        Batch batch = 2;
+    }
+}
+
+message AudioUploadResponse {
+    string audioId = 1;
+}
+
+message Metadata {
+    int64 totalFileSize = 1;
+    google.protobuf.Timestamp recordStartTime = 2;
+}
+
+message Batch {
+    bytes data = 1;
+}
+
+
+
+// Определение сервиса.
+service EarsService {
+  rpc register(RegistrationRequest) returns (google.protobuf.Empty) {
+  }
+
+  rpc uploadAudio(stream AudioUploadRequest) returns (AudioUploadResponse){
+  }
+
+
+  rpc testAuth(google.protobuf.Empty) returns (google.protobuf.Empty){}
+}
